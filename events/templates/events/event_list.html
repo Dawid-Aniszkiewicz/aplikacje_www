@@ -1,0 +1,32 @@
+{% extends 'events/base.html' %}
+
+{% block title %}Aktualne Wydarzenia – EventHub{% endblock %}
+
+{% block content %}
+    <h2>Nadchodzące wydarzenia</h2>
+    <p>Przeglądaj najnowsze konferencje, warsztaty i spotkania branżowe:</p>
+
+    <form method="get" action="{% url 'events:event-list' %}" class="search-form">
+        <input type="text" name="q" placeholder="Szukaj po tytule..." value="{{ q|default:'' }}">
+        <button type="submit">Szukaj</button>
+    </form>
+
+    <nav class="category-nav">
+        <a href="{% url 'events:event-list' %}"
+           class="{% if not current_category %}active{% endif %}">Wszystkie</a>
+        {% for category in categories %}
+            <a href="{% url 'events:events-by-category' category.slug %}"
+               class="{% if current_category == category %}active{% endif %}">{{ category.name }}</a>
+        {% endfor %}
+    </nav>
+
+    {% if events %}
+        <div class="event-grid">
+            {% for event in events %}
+                {% include 'events/includes/event_card.html' %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <p style="margin-top: 20px;">Brak opublikowanych wydarzeń w tej chwili.</p>
+    {% endif %}
+{% endblock %}

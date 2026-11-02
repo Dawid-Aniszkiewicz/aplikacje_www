@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}EventHub – Platforma Wydarzeń{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'events/css/style.css' %}">
+</head>
+<body>
+    <header class="navbar">
+        <div class="container">
+            <h1 class="logo"><a href="{% url 'events:event-list' %}">Event<span>Hub</span></a></h1>
+            <nav>
+                <a href="{% url 'events:event-list' %}">Wydarzenia</a>
+                <a href="/admin/" target="_blank">Panel Administratora</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        {% block content %}
+        <!-- Tutaj zostanie wstrzyknięta treść poszczególnych widoków -->
+        {% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 EventHub. Aplikacje WWW – Wydział Matematyki i Informatyki UWM.</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,36 @@
+{% extends 'events/base.html' %}
+
+{% block title %}{{ event.title }} – EventHub{% endblock %}
+
+{% block content %}
+    <div class="detail-view">
+        <a href="{% url 'events:event-list' %}" style="color: #0284c7; text-decoration: none;">&larr; Wróć do listy wydarzeń</a>
+        <h1 style="margin-top: 15px;">{{ event.title }}</h1>
+        <span class="badge">{{ event.category.name }}</span>
+
+        <div class="meta" style="margin: 20px 0; font-size: 1rem;">
+            <p><strong>Termin:</strong> {{ event.date|date:"l, d F Y, \g\o\d\z. H:i" }}</p>
+            <p><strong>Lokalizacja:</strong> {{ event.location }}</p>
+            <p><strong>Organizator:</strong> {{ event.organizer.get_full_name|default:event.organizer.username }}</p>
+            <p><strong>Dostępne miejsca:</strong> {{ event.capacity }} osób</p>
+            <p><strong>Koszt udziału:</strong> {% if event.price == 0 %}Bezpłatne{% else %}{{ event.price }} PLN{% endif %}</p>
+        </div>
+
+        <h3>Opis wydarzenia</h3>
+        <p style="white-space: pre-line; margin-top: 10px;">{{ event.description }}</p>
+
+        <div style="margin-top: 30px; padding: 20px; background-color: #f8fafc; border-radius: 6px;">
+            <h4>Chcesz wziąć udział?</h4>
+            <p>Rezerwacja biletów przez przeglądarkę będzie dostępna wkrótce za pośrednictwem naszego REST API (Lab 4-9)!</p>
+        </div>
+    </div>
+
+    <h3 style="margin-top: 40px;">Podobne wydarzenia</h3>
+    <div class="event-grid">
+        {% for rel_event in related_events %}
+            {% include 'events/includes/event_card.html' with event=rel_event %}
+        {% empty %}
+            <p>Brak innych wydarzeń w tej kategorii.</p>
+        {% endfor %}
+    </div>
+{% endblock %}
