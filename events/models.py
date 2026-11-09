@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator
 
 
 class Category(models.Model):
@@ -18,6 +18,19 @@ class Category(models.Model):
         return self.name
 
 
+class Tag(models.Model):
+    name = models.CharField(max_length=50, unique=True, verbose_name="Nazwa tagu")
+    slug = models.SlugField(max_length=60, unique=True, verbose_name="Slug tagu")
+
+    class Meta:
+        verbose_name = "Tag"
+        verbose_name_plural = "Tagi"
+        ordering = ['name']
+
+    def __str__(self):
+        return f"#{self.name}"
+
+
 class Event(models.Model):
     title = models.CharField(max_length=200, verbose_name="Tytuł wydarzenia")
     slug = models.SlugField(max_length=220, unique=True, verbose_name="Slug (URL)")
@@ -32,6 +45,12 @@ class Event(models.Model):
         on_delete=models.CASCADE,
         related_name="organized_events",
         verbose_name="Organizator"
+    )
+    tags = models.ManyToManyField(
+        Tag,
+        related_name="events",
+        blank=True,
+        verbose_name="Tagi tematyczne"
     )
     description = models.TextField(verbose_name="Szczegółowy opis")
     location = models.CharField(max_length=255, verbose_name="Miejsce / Adres / Link online")
